@@ -29,15 +29,17 @@ class ListScreen extends Component {
         if(!todoList)
 	        return <React.Fragment />
         return (
-            <div className="container white">
+            <div className="container grey lighten-3">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
-                <div className="input-field">
+                <div class = "row">
+                <div className="input-field col s6">
                     <label htmlFor="email">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
                 </div>
-                <div className="input-field">
+                <div className="input-field col s6">
                     <label htmlFor="password">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                </div>
                 </div>
                 <ItemsList todoList={todoList} />
             </div>
@@ -51,7 +53,6 @@ const mapStateToProps = (state, ownProps) => {
   const todoList = todoLists ? todoLists[id] : null;
   if(todoList)
 	todoList.id = id;
-  todoList.id = id;
 
   return {
     todoList,

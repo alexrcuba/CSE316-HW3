@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -10,6 +10,7 @@ import LoginScreen from './components/login_screen/LoginScreen.js';
 import HomeScreen from './components/home_screen/HomeScreen.js';
 import ListScreen from './components/list_screen/ListScreen.js';
 import DatabaseTester from './test/DatabaseTester'
+import history from './components/home_screen/history';
 
 class App extends Component {
   render() {
@@ -19,7 +20,7 @@ class App extends Component {
     // But if not then we doesn't render the one.
     if (auth.isLoaded) {
       return (
-        <BrowserRouter>
+        <Router history={history}>
           <div className="App">
             <Navbar />
             <Switch>
@@ -31,7 +32,7 @@ class App extends Component {
               <Route path="/:any" component={HomeScreen} />
             </Switch>
           </div>
-        </BrowserRouter>
+        </Router>
       );
     }
 

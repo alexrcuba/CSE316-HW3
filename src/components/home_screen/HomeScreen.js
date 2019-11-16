@@ -3,9 +3,27 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
+import { getFirestore } from 'redux-firestore';
+import firebase from 'firebase/app';
 import TodoListLinks from './TodoListLinks'
+import { Link } from 'react-router-dom';
+import history from './history';
 
 class HomeScreen extends Component {
+    
+    handleNewList = () => {
+        const fireStore = getFirestore();
+        fireStore.collection('todoLists').add({
+                    name: "NULL",
+                    owner: "NULL",
+                    items: [],
+                    created: firebase.firestore.Timestamp.fromDate(new Date())
+                }).then((todoList) => {
+                    history.push({pathname: '/todolist/' + todoList.id});
+                }).catch((err) => {
+                    console.log(err);
+            });
+    }
 
     render() {
         if (!this.props.auth.uid) {
@@ -26,9 +44,11 @@ class HomeScreen extends Component {
                         </div>
                         
                         <div className="home_new_list_container">
+                            <Link to = {this.history}>
                                 <button className="home_new_list_button" onClick={this.handleNewList}>
                                     Create a New To Do List
                                 </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -46,6 +66,6 @@ const mapStateToProps = (state) => {
 export default compose(
     connect(mapStateToProps),
     firestoreConnect([
-      { collection: 'todoLists' },
+      { collection: 'todoLists', orderBy: ['created', 'desc'] },
     ]),
 )(HomeScreen);
