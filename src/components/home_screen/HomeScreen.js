@@ -1,28 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
-import { getFirestore } from 'redux-firestore';
 import firebase from 'firebase/app';
 import TodoListLinks from './TodoListLinks'
 import { Link } from 'react-router-dom';
-import history from './history';
+import {createTodoList} from '../../store/actions/actionCreators'
 
 class HomeScreen extends Component {
+
+    state = {
+        name: "NULL",
+        owner: "NULL",
+        items: [],
+        created: firebase.firestore.Timestamp.fromDate(new Date())
+    }
     
-    handleNewList = () => {
-        const fireStore = getFirestore();
-        fireStore.collection('todoLists').add({
-                    name: "NULL",
-                    owner: "NULL",
-                    items: [],
-                    created: firebase.firestore.Timestamp.fromDate(new Date())
-                }).then((todoList) => {
-                    history.push({pathname: '/todolist/' + todoList.id});
-                }).catch((err) => {
-                    console.log(err);
-            });
+    handleNewList = (e) => {
+        e.preventDefault()
+        this.props.createTodoList(this.state)
     }
 
     render() {
@@ -57,6 +54,12 @@ class HomeScreen extends Component {
     }
 }
 
+const mapDispatchtoProps = (dispatch) => {
+    return{
+        createTodoList: (todoList) => dispatch(createTodoList(todoList))
+    }
+}
+
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth
@@ -64,7 +67,7 @@ const mapStateToProps = (state) => {
 };
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchtoProps),
     firestoreConnect([
       { collection: 'todoLists', orderBy: ['created', 'desc'] },
     ]),

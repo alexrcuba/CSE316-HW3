@@ -1,3 +1,4 @@
+import history from '../../components/home_screen/history';
 // THIS FILE KNOWS HOW TO MAKE ALL THE ACTION
 // OBJECDTS THAT WE WILL USE. ACTIONS ARE SIMPLE
 // LITTLE PACKAGES THAT REPRESENT SOME EVENT
@@ -11,6 +12,7 @@ export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const CREATE_TODO_LIST = 'CREATE_TODO_LIST';
 
 // THESE CREATORS MAKE ACTIONS ASSOCIATED WITH USER ACCOUNTS
 
@@ -32,14 +34,16 @@ export function logoutSuccess() {
 
 // THESE CREATORS MAKE ACTIONS FOR ASYNCHRONOUS TODO LIST UPDATES
 export function createTodoList(todoList) {
-    return {
-        type: 'CREATE_TODO_LIST',
-        todoList
-    }
-}
-export function createTodoListError(error) {
-    return {
-        type: 'CREATE_TODO_LIST_ERROR',
-        error
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+    const firestore = getFirestore()
+    firestore.collection("todoLists").add({
+        ...todoList
+    }).then((todoList) => {
+        history.push({pathname: '/todolist/' + todoList.id});
+        dispatch({type: 'CREATE_TODO_LIST', todoList})
+    }).catch((err) => {
+        dispatch({
+            type: 'CREATE_TODO_LIST_ERROR', err})
+    })
     }
 }

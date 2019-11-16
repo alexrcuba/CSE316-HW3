@@ -31,7 +31,7 @@ class ListScreen extends Component {
         return (
             <div className="container grey lighten-3">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
-                <div class = "row">
+                <div className = "row">
                 <div className="input-field col s6">
                     <label htmlFor="email">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
@@ -52,7 +52,11 @@ const mapStateToProps = (state, ownProps) => {
   const { todoLists } = state.firestore.data;
   const todoList = todoLists ? todoLists[id] : null;
   if(todoList)
-	todoList.id = id;
+    todoList.id = id;
+    //const fireStore = getFirestore();
+    //let timeRef = fireStore.collection('todoLists').doc(id);
+    //timeRef.update({created: firebase.firestore.Timestamp.fromDate(new Date())});
+    
 
   return {
     todoList,

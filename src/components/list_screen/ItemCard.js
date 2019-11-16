@@ -3,7 +3,7 @@ import React from 'react';
 class ItemCard extends React.Component {
 
     ifCompleted(completed){
-        if(completed == true){
+        if(completed === true){
             return "Completed"
         } else{
             return "Pending"
