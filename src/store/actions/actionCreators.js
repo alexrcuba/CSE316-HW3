@@ -47,3 +47,56 @@ export function createTodoList(todoList) {
     })
     }
 }
+export function updateListName(name, id) {
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore()
+        firestore.collection("todoLists").doc(id).update({
+            name: name
+        }).then(() => {
+            dispatch({type: 'UPDATE_LIST_NAME', name})
+        }).catch((err) => {
+            dispatch({
+                type: 'UPDATE_LIST_NAME_ERROR', err})
+        })
+        }
+}
+export function updateListOwner(owner, id) {
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore()
+        firestore.collection("todoLists").doc(id).update({
+            owner: owner
+        }).then(() => {
+            dispatch({type: 'UPDATE_LIST_NAME', owner})
+        }).catch((err) => {
+            dispatch({
+                type: 'UPDATE_LIST_NAME_ERROR', err})
+        })
+        }
+}
+export function updateNewDate(id) {
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore()
+        const firebase = getFirebase();
+        firestore.collection("todoLists").doc(id).update({
+            created: firebase.firestore.Timestamp.fromDate(new Date())
+        }).then(() => {
+            dispatch({type: 'UPDATE_NEW_DATE', id})
+        }).catch((err) => {
+            dispatch({
+                type: 'UPDATE_NEW_DATE_ERROR', err})
+        })
+        }
+}
+export function updateItem(list, id) {
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore()
+        firestore.collection("todoLists").doc(id).update({
+            items: list.items
+        }).then(() => {
+            dispatch({type: 'UPDATE_ITEM', id})
+        }).catch((err) => {
+            dispatch({
+                type: 'UPDATE_ITEM', err})
+        })
+        }
+}

@@ -20,7 +20,13 @@ class ItemsList extends React.Component {
                     </Link>
                     );})
                 }
+                <Link to={'/todoList/' + todoList.id + "/" + items.length} key={todoList.key}>
+                    <div className="card-content grey-text text-darken-3">
+                        <div className="card grey z-depth-0 todo-list-link pink-lighten-3">+</div>
+                    </div>
+                </Link>
             </div>
+
         );
     }
 }

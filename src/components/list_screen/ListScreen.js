@@ -4,20 +4,17 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
+import { updateListName, updateListOwner } from '../../store/actions/actionCreators.js';
 
 class ListScreen extends Component {
-    state = {
-        name: '',
-        owner: '',
-    }
 
-    handleChange = (e) => {
+    handleChange = (id, e) => {
         const { target } = e;
-
-        this.setState(state => ({
-            ...state,
-            [target.id]: target.value,
-        }));
+        if(target.id === "name"){
+            this.props.updateListName(target.value, id);
+        } else if(target.id === "owner"){
+            this.props.updateListOwner(target.value, id);
+        }
     }
 
     render() {
@@ -34,11 +31,11 @@ class ListScreen extends Component {
                 <div className = "row">
                 <div className="input-field col s6">
                     <label htmlFor="email">Name</label>
-                    <input className="active" type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
+                    <input className="active" type="text" name="name" id="name" onChange={(e) => this.handleChange(todoList.id, e)} value={todoList.name} />
                 </div>
                 <div className="input-field col s6">
                     <label htmlFor="password">Owner</label>
-                    <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                    <input className="active" type="text" name="owner" id="owner" onChange={(e) => this.handleChange(todoList.id, e)} value={todoList.owner} />
                 </div>
                 </div>
                 <ItemsList todoList={todoList} />
@@ -53,19 +50,21 @@ const mapStateToProps = (state, ownProps) => {
   const todoList = todoLists ? todoLists[id] : null;
   if(todoList)
     todoList.id = id;
-    //const fireStore = getFirestore();
-    //let timeRef = fireStore.collection('todoLists').doc(id);
-    //timeRef.update({created: firebase.firestore.Timestamp.fromDate(new Date())});
-    
-
   return {
     todoList,
     auth: state.firebase.auth,
   };
 };
 
+const mapDispatchtoProps = (dispatch) => {
+    return{
+    updateListName: (todoList, id) => dispatch(updateListName(todoList, id)),
+    updateListOwner: (todoList, id) => dispatch(updateListOwner(todoList, id))
+    }
+}
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchtoProps),
   firestoreConnect([
     { collection: 'todoLists' },
   ]),
