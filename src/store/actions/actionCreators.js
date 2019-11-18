@@ -100,3 +100,15 @@ export function updateItem(list, id) {
         })
         }
 }
+export function deleteList(id) {
+    return(dispatch, getState, {getFirebase, getFirestore}) => {
+    const fireStore = getFirestore();
+    fireStore.collection('todoLists').doc(id).delete()
+    .then(() => {
+        dispatch({type: 'DELETE_LIST', id})
+    }).catch((err) => {
+        dispatch({
+            type: 'DELETE_LIST_ERROR', err})
+    })
+    }
+}

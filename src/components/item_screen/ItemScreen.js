@@ -10,11 +10,13 @@ import { updateItem } from '../../store/actions/actionCreators.js';
 class ItemScreen extends Component {
     state = {
         init : false,
+        item: {
         description: '',
         assigned_to: '',
         due_date: '',
         completed: false,
         key: -1
+        }
     }
 
     handleChange = (list, item, e) => {
@@ -23,11 +25,13 @@ class ItemScreen extends Component {
         if(this.state.init === false){
             this.setState({
                 init: true,
+                item: {
                 description: item.description,
                 assigned_to: item.assigned_to,
                 due_date: item.due_date,
                 completed: item.completed,
                 key: item.key
+                }
             });
         }
         if(e instanceof Date){
@@ -46,7 +50,7 @@ class ItemScreen extends Component {
             list.items[item.key] = item
         } else if(target.id === "cancel"){
             if(this.state.init !== false){
-                list.items[item.key] = this.state;
+                list.items[item.key] = this.state.item;
             } else if(item.key === list.items.length){
                 list.items = list.items.slice(0, list.items.length);
             }
