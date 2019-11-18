@@ -47,6 +47,8 @@ class ItemScreen extends Component {
         } else if(target.id === "cancel"){
             if(this.state.init !== false){
                 list.items[item.key] = this.state;
+            } else if(item.key === list.items.length){
+                list.items = list.items.slice(0, list.items.length);
             }
         }
     }
@@ -58,9 +60,9 @@ class ItemScreen extends Component {
 
     submitDisable(item) {
         if(item.assigned_to === "" || item.description === "" || item.due_date === ""){
-            return "waves-effect waves-light btn-large disabled";
+            return "waves-effect waves-light btn-large disabled grey darken-1";
         } else {
-            return "waves-effect waves-light btn-large";
+            return "waves-effect waves-light btn-large grey darken-1";
         }
     }
 
@@ -100,7 +102,7 @@ class ItemScreen extends Component {
                 <div className="checkbox">
                     <p>
                         <label>
-                            <input id="completed" type="checkbox" class="filled-in" checked={item.completed} onChange={(e) => this.handleChange(todoList, item, e)} />
+                            <input id="completed" type="checkbox" className="filled-in  grey darken-1" checked={item.completed} onChange={(e) => this.handleChange(todoList, item, e)} />
                             <span>Completed</span>
                         </label>
                     </p>
@@ -109,7 +111,7 @@ class ItemScreen extends Component {
                 <div class={this.submitDisable(item)}>Submit</div>
                 </Link>
                 <Link to={'/todoList/' + todoList.id} key={todoList.id}>
-                <div id="cancel" class="waves-effect waves-light btn-large" onClick={(e) => this.handleChange(todoList, item, e)}>Cancel</div>
+                <div id="cancel" class="waves-effect waves-light btn-large grey darken-1" onClick={(e) => this.handleChange(todoList, item, e)}>Cancel</div>
                 </Link>
                 </div>
             </div>
@@ -125,13 +127,23 @@ const mapDispatchtoProps = (dispatch) => {
 
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
-  const { key } = ownProps.match.params;
+  var { key } = ownProps.match.params;
   const { todoLists } = state.firestore.data;
   const todoList = todoLists ? todoLists[id] : null;
   var item = null;
   if(todoList){
     todoList.id = id;
+    if(key=== todoList.items.length.toString() ){
+        item = {
+            description: '',
+            assigned_to: '',
+            due_date: '',
+            completed: false,
+            key: todoList.items.length
+        }
+    } else{
     item = todoList.items[key];
+    }
   }
   return {
     todoList,

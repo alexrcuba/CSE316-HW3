@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import { updateListName, updateListOwner } from '../../store/actions/actionCreators.js';
+import { Modal, Button, Icon } from 'react-materialize';
 
 class ListScreen extends Component {
 
@@ -27,7 +28,16 @@ class ListScreen extends Component {
 	        return <React.Fragment />
         return (
             <div className="container grey lighten-3">
-                <h5 className="grey-text text-darken-3">Todo List</h5>
+                <div className="row">
+                <h5 className="grey-text text-darken-3 col s9">Todo List</h5>
+                <div>
+                <Modal  header="Delete List" trigger={<Button className="waves-effect waves-light btn grey darken-1" large="true">Delete List<Icon large right>delete</Icon></Button>}
+                  actions={<div><Button className="grey darken-1 waves-effect waves-light btn modal-action modal-close">Submit</Button>
+                  <Button className="grey darken-1 waves-effect waves-light btn modal-action modal-close">Cancel</Button></div>}>
+                    <h5>Are you sure that you want to delete this list? This is will no longer be retrievable.</h5>
+                    </Modal>
+                </div>
+                </div>
                 <div className = "row">
                 <div className="input-field col s6">
                     <label htmlFor="email">Name</label>

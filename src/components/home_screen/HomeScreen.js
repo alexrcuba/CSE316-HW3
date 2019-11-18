@@ -11,8 +11,8 @@ import {createTodoList} from '../../store/actions/actionCreators'
 class HomeScreen extends Component {
 
     state = {
-        name: "NULL",
-        owner: "NULL",
+        name: "Unknown",
+        owner: "Unknown",
         items: [],
         created: firebase.firestore.Timestamp.fromDate(new Date())
     }
